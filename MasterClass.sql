@@ -99,5 +99,26 @@ WHERE
 	AND OH.TotalDue > 500
 
 -----------------------------------------------------------------------------------
-------------	LEAD & LAG Function	
+------------	SUB Query Nivel 1
+-- consulta que muestre los tres pedidos más caros, por ID de proveedor
 -----------------------------------------------------------------------------------
+SELECT
+	PurchaseOrderID,
+	VendorID,
+	OrderDate,
+	TaxAmt,
+	Freight,
+	TotalDue
+FROM
+	(SELECT
+			PurchaseOrderID,
+			VendorID,
+			OrderDate,
+			TaxAmt,
+			Freight,
+			TotalDue,
+			--[RankTotal] = ROW_NUMBER() OVER(PARTITION BY VendorID ORDER BY [TotalDue] DESC)	 -- 248 FILAS
+			[RankTotal] = DENSE_RANK() OVER(PARTITION BY VendorID ORDER BY [TotalDue] DESC)  -- 3142 FILAS
+	 FROM Purchasing.PurchaseOrderHeader
+	) a
+WHERE [RankTotal] <=3
