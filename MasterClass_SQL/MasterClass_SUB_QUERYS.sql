@@ -103,10 +103,14 @@ SELECT
 ----------	PIVOT	
 ----------------------------------------------------------------------------------------
 SELECT
-	*
+	[Employee Gender] = Gender,
+	[Sales Representative],
+	Buyer,
+	Janitor
 FROM (
 		SELECT 
 			JobTitle,
+			Gender,
 			VacationHours
 		FROM HumanResources.Employee
 	 ) S
@@ -115,3 +119,5 @@ PIVOT(
 AVG(VacationHours)
 FOR JobTitle IN([Sales Representative],[Buyer],[Janitor])
 ) B
+
+SELECT * FROM HumanResources.EmployeePayHistory
