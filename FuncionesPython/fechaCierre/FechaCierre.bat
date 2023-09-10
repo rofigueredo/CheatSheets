@@ -1,0 +1,2 @@
+python getFechaCierre.py
+pause
