@@ -1,0 +1,41 @@
+Date = VAR FiscalStart = "06"
+VAR STARTYEAR = "2015"
+VAR ENDYEAR = "2020"
+RETURN 
+ADDCOLUMNS(
+  CALENDAR(Date(STARTYEAR,01,01),(Date(ENDYEAR,12,31))), 
+"Year" , YEAR([Date]),
+"Short Year" , VALUE(Right(YEAR([Date]),2)),
+"Month Number" , Month([Date]),
+"Month Number Full" , FORMAT([Date],"MM"),
+"Month Full" , FORMAT([Date],"MMMM"),
+"Month Abbr" , FORMAT ([Date],"MMM"),
+"Week Number", WEEKNUM([Date]),
+"Week Number Full" , Format(WEEKNUM([Date]),"00"),
+"Day of Month" , DAY([Date]),
+"Day of Month Full" , FORMAT(Day([Date]),"00"),
+"Day of Week" , WEEKDAY([Date]),
+"Day of Week Full" , FORMAT([Date],"dddd"),
+"Day of Week Abbr" , FORMAT([Date],"ddd"),
+"ISO Date" , YEAR([Date])&FORMAT(Day([Date]),"00")&FORMAT(Day([Date]),"00"),
+"Full Date" , DAY([Date])&" "&FORMAT([Date],"MMMM")&" "&YEAR([Date]),
+"Quarter Full" , "Quarter " & ROUNDDOWN(Month([Date])/4,0)+1,
+"Quarter Abbr" , "Qtr " & ROUNDDOWN(Month([Date])/4,0)+1,
+"Quarter" , "Q" & ROUNDDOWN(Month([Date])/4,0)+1,
+"Quarter Number" , Format(ROUNDDOWN(Month([Date])/4,0)+1,"00"),
+"Quarter and Year" , "Q" & ROUNDDOWN(Month([Date])/4,0)+1 & " "& YEAR([Date]),
+"Month and Year Abbr" ,  FORMAT ([Date],"MMM") & " " & YEAR([Date]),
+"Quarter and Year Number" , YEAR([Date])&Format(ROUNDDOWN(Month([Date])/4,0)+1,"00"),
+"Year and Week", VALUE(YEAR([Date])&FORMAT(WEEKNUM([Date]),00)),
+"Year and Month Number", VALUE((YEAR([Date])&FORMAT([Date],"MM"))),
+"IS Work Day" , IF(OR(WEEKDAY([Date])=1, WEEKDAY([Date])=7),"NO","YES"),
+"Current Month", IF(DATEDIFF(TODAY(),[Date],MONTH)=0,"Yes","No"),
+"Current Year", IF(DATEDIFF(TODAY(),[Date],Year)=0,"Yes", "No"),
+"Month Offset", (DATEDIFF(TODAY(),[Date],MONTH)),
+"Day Offset", (DATEDIFF(TODAY(),[Date],DAY)),
+"Fiscal Year", IF(FiscalStart <= FORMAT([Date],"MM"), "FY"&(YEAR([Date])+1),"FY"&YEAR([Date])),
+"Fiscal Month", Value(IF(FiscalStart <= FORMAT([Date],"MM"), (Month([Date]) -FiscalStart+1), ((12-FiscalStart+1)+Month([Date])))),
+"Fiscal Quarter", If (Value(IF(FiscalStart <= FORMAT([Date],"MM"), (Month([Date]) -FiscalStart+1), ((12-FiscalStart+1)+Month([Date])))) < 4,"Q1", 
+    If (Value(IF(FiscalStart <= FORMAT([Date],"MM"), (Month([Date]) -FiscalStart+1), ((12-FiscalStart+1)+Month([Date])))) < 7,"Q2",
+        If (Value(IF(FiscalStart <= FORMAT([Date],"MM"), (Month([Date]) -FiscalStart+1), ((12-FiscalStart+1)+Month([Date])))) < 10,"Q3","Q4")))
+)
